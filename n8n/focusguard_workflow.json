@@ -1,0 +1,163 @@
+{
+  "name": "FocusGuard AI Workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "d6d71ed0-9a99-46e7-bbd6-456945ae71ca",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [0, 0],
+      "id": "0ad05331-db9e-4c32-af04-63168c63732d",
+      "name": "Webhook",
+      "webhookId": "d6d71ed0-9a99-46e7-bbd6-456945ae71ca"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": { "caseSensitive": true, "leftValue": "", "typeValidation": "strict", "version": 3 },
+          "conditions": [
+            {
+              "id": "a4ced97b-50d4-4d90-9bf4-09c94d21f251",
+              "leftValue": "={{ $json.body.alert }}",
+              "rightValue": "",
+              "operator": { "type": "boolean", "operation": "true", "singleValue": true }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [208, 0],
+      "id": "97c2d81d-b24f-41e2-8cc6-3ecd81b6f095",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "chatId": "5630167675",
+        "text": "=⚠️ FocusGuard AI Alert!  👤 Status: {{ $('Webhook').item.json.body.fatigue_status }} 👁️ Blinks/min: {{ $('Webhook').item.json.body.blinks_per_min }} ⏱️ Session: {{ $('Webhook').item.json.body.session_duration_sec }}s 🕐 Time: {{ $('Webhook').item.json.body.timestamp }}  😌 Please take a break and rest your eyes!",
+        "additionalFields": { "appendAttribution": false }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [448, -96],
+      "id": "a542fc09-5849-4dc1-a775-60ee40a59c68",
+      "name": "Send a text message",
+      "webhookId": "6bd181ed-da11-4739-8cdc-4b0666d44930",
+      "credentials": { "telegramApi": { "id": "JVfwSalHIErMGmIS", "name": "Telegram account" } }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1JeHZx-41JBBanWUpzD4L8Aezu-d93xEucxYn_JJ3G0I",
+          "mode": "list",
+          "cachedResultName": "FocusGuard Logs",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1JeHZx-41JBBanWUpzD4L8Aezu-d93xEucxYn_JJ3G0I/edit?usp=drivesdk"
+        },
+        "sheetName": { "__rl": true, "value": "gid=0", "mode": "list", "cachedResultName": "Sheet1" },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Timestamp": "={{ $('Webhook').item.json.body.timestamp }}",
+            "Blink Count": "={{ $('Webhook').item.json.body.blink_count }}",
+            "Blinks Per Min": "={{ $('Webhook').item.json.body.blinks_per_min }}",
+            "Status": "={{ $('Webhook').item.json.body.fatigue_status }}",
+            "Session (sec)": "={{ $('Webhook').item.json.body.session_duration_sec }}",
+            "Alert": "={{ $('Webhook').item.json.body.alert }}",
+            "Username": "={{ $('Webhook').item.json.body.user_name }}",
+            "Email": "={{ $('Webhook').item.json.body.user_email }}"
+          }
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [672, -96],
+      "id": "3189df4a-c19d-4605-b056-dc5839f3b831",
+      "name": "Append row in sheet (alert)",
+      "credentials": { "googleSheetsOAuth2Api": { "id": "GnfTjy6dmquaXfOZ", "name": "Google Sheets OAuth2 API" } }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Webhook').item.json.body.user_email }}",
+        "subject": "=FocusGuard AI — Session Report {{ $('Webhook').item.json.body.timestamp }}",
+        "message": "Hello {{ $('Webhook').item.json.body.user_name }},\n\nFocusGuard AI Session Report\n\nTime: {{ $('Webhook').item.json.body.timestamp }}\nTotal Blinks: {{ $('Webhook').item.json.body.blink_count }}\nBlinks/min: {{ $('Webhook').item.json.body.blinks_per_min }}\nSession Duration: {{ $('Webhook').item.json.body.session_duration_sec }} seconds\nStatus: {{ $('Webhook').item.json.body.fatigue_status }}\nAlert: {{ $('Webhook').item.json.body.alert }}\n\nTip: Normal blink rate is 15-20 blinks/min. Take a 20-second break every 20 minutes!\n\nSent automatically by FocusGuard AI via n8n",
+        "options": { "appendAttribution": false }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [880, -96],
+      "id": "25bd4801-3094-4834-afdb-957ff332ca16",
+      "name": "Send a message (alert)",
+      "webhookId": "ecb07893-86b3-4e36-8120-fe232784bfea",
+      "credentials": { "gmailOAuth2": { "id": "JOqa1ojFWiBbGsJG", "name": "Gmail OAuth2 API" } }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1JeHZx-41JBBanWUpzD4L8Aezu-d93xEucxYn_JJ3G0I",
+          "mode": "list",
+          "cachedResultName": "FocusGuard Logs"
+        },
+        "sheetName": { "__rl": true, "value": "gid=0", "mode": "list", "cachedResultName": "Sheet1" },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Timestamp": "={{ $('Webhook').item.json.body.timestamp }}",
+            "Blink Count": "={{ $('Webhook').item.json.body.blink_count }}",
+            "Blinks Per Min": "={{ $('Webhook').item.json.body.blinks_per_min }}",
+            "Status": "={{ $('Webhook').item.json.body.fatigue_status }}",
+            "Session (sec)": "={{ $('Webhook').item.json.body.session_duration_sec }}",
+            "Alert": "={{ $('Webhook').item.json.body.alert }}",
+            "Username": "={{ $('Webhook').item.json.body.user_name }}",
+            "Email": "={{ $('Webhook').item.json.body.user_email }}"
+          }
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [432, 96],
+      "id": "42ac0264-9673-48f7-870f-bc34c77dfeac",
+      "name": "Append row in sheet (healthy)",
+      "credentials": { "googleSheetsOAuth2Api": { "id": "GnfTjy6dmquaXfOZ", "name": "Google Sheets OAuth2 API" } }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Webhook').item.json.body.user_email }}",
+        "subject": "=FocusGuard AI — Session Report {{ $('Webhook').item.json.body.timestamp }}",
+        "message": "Hello {{ $('Webhook').item.json.body.user_name }},\n\nGreat session! Your eye-health metrics looked healthy.\n\nTime: {{ $('Webhook').item.json.body.timestamp }}\nTotal Blinks: {{ $('Webhook').item.json.body.blink_count }}\nBlinks/min: {{ $('Webhook').item.json.body.blinks_per_min }}\nSession Duration: {{ $('Webhook').item.json.body.session_duration_sec }} seconds\nStatus: {{ $('Webhook').item.json.body.fatigue_status }}\n\nKeep it up!\n\nSent automatically by FocusGuard AI via n8n",
+        "options": { "appendAttribution": false }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [688, 112],
+      "id": "e9fbfd76-a064-4167-bbad-54698fc532df",
+      "name": "Send a message (healthy)",
+      "webhookId": "ecb07893-86b3-4e36-8120-fe232784bfea",
+      "credentials": { "gmailOAuth2": { "id": "JOqa1ojFWiBbGsJG", "name": "Gmail OAuth2 API" } }
+    }
+  ],
+  "connections": {
+    "Webhook": { "main": [[{ "node": "If", "type": "main", "index": 0 }]] },
+    "If": {
+      "main": [
+        [{ "node": "Send a text message", "type": "main", "index": 0 }],
+        [{ "node": "Append row in sheet (healthy)", "type": "main", "index": 0 }]
+      ]
+    },
+    "Send a text message": { "main": [[{ "node": "Append row in sheet (alert)", "type": "main", "index": 0 }]] },
+    "Append row in sheet (alert)": { "main": [[{ "node": "Send a message (alert)", "type": "main", "index": 0 }]] },
+    "Append row in sheet (healthy)": { "main": [[{ "node": "Send a message (healthy)", "type": "main", "index": 0 }]] }
+  },
+  "active": false,
+  "settings": { "executionOrder": "v1" }
+}

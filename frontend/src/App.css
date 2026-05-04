@@ -1,0 +1,30 @@
+.App {
+  min-height: 100vh;
+  transition: background 0.3s, color 0.3s;
+}
+
+/* Dark mode (default) */
+.App.dark-mode {
+  background: #05050A;
+  color: white;
+}
+
+/* Light mode */
+.App.light-mode {
+  background: #f4f4f8;
+  color: #111;
+}
+
+.App.light-mode .bg-\[\#0C0C14\],
+.App.light-mode .bg-\[\#0A0A12\],
+.App.light-mode .bg-\[\#05050A\] {
+  background: #ffffff !important;
+  color: #111 !important;
+}
+
+.App.light-mode .text-zinc-400 { color: #555 !important; }
+.App.light-mode .text-white { color: #111 !important; }
+.App.light-mode .border-white\/5 { border-color: #ddd !important; }
+.App.light-mode .border-white\/10 { border-color: #ccc !important; }
+.App.light-mode .bg-white\/\[0\.02\] { background: #f9f9f9 !important; }
+.App.light-mode .bg-white\/\[0\.03\] { background: #f0f0f0 !important; }

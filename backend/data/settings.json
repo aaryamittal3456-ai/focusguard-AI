@@ -1,0 +1,14 @@
+[
+  {
+    "user_id": "dce81a7e-5432-4c11-893e-45bf6c0d6622",
+    "n8n_webhook_url": "https://aarya123.app.n8n.cloud/webhook/d6d71ed0-9a99-46e7-bbd6-456945ae71ca",
+    "telegram_bot_token": "",
+    "telegram_chat_id": "",
+    "blink_threshold_low": 12,
+    "blink_threshold_strain": 8,
+    "break_reminder_minutes": 20,
+    "sound_alerts": true,
+    "desktop_notifications": true,
+    "dark_mode": true
+  }
+]

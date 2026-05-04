@@ -1,0 +1,87 @@
+{
+  "theme": "dark",
+  "archetype": "7 - Electric & Neon (Refined for Premium AI Health-Tech)",
+  "branding_tone": "Futuristic, startup-grade, highly polished, clinical but tech-forward.",
+  "typography": {
+    "headings_font": "Outfit",
+    "body_font": "Manrope",
+    "hierarchy": {
+      "h1": "text-4xl sm:text-5xl lg:text-6xl tracking-tighter font-black",
+      "h2": "text-2xl sm:text-3xl lg:text-4xl tracking-tight font-bold",
+      "h3": "text-xl sm:text-2xl tracking-tight font-semibold",
+      "body": "text-base leading-relaxed font-normal",
+      "overline": "text-xs tracking-[0.2em] uppercase font-bold text-cyan-400"
+    },
+    "guidelines": "Do not use Inter for headings. Use fluid scaling. Apply tight letter spacing for headings."
+  },
+  "colors": {
+    "background": "#05050A",
+    "surface": "#0C0C14",
+    "surface_glass": "rgba(12, 12, 20, 0.6)",
+    "primary": "#8A2BE2",
+    "primary_hover": "#9D4CDD",
+    "secondary": "#00E5FF",
+    "text_primary": "#FFFFFF",
+    "text_secondary": "#A1A1AA",
+    "borders": "rgba(255, 255, 255, 0.08)",
+    "status": {
+      "healthy": "#00E5FF",
+      "low_blink_rate": "#FF9F0A",
+      "strain_detected": "#FF3366"
+    },
+    "guidelines": "Never use pure #000000. Use tinted deep space background. Elements should have a subtle 1px inner border. Interactive states must explicitly define hover text and background colors with high contrast."
+  },
+  "spacing_and_layout": {
+    "padding_scale": "Generous spacing: p-6 to p-12 for containers.",
+    "dashboard_grid": "Mode B: The 'Control Room' grid. Base: grid-cols-1 md:grid-cols-3 lg:grid-cols-4. Gap: gap-6.",
+    "landing_grid": "Mode A: The 'Tetris' grid. Highly asymmetrical. Base: grid-cols-1 md:grid-cols-8 lg:grid-cols-12. Gap: gap-8.",
+    "radii": "rounded-2xl for main cards, rounded-full for pills/buttons.",
+    "guidelines": "Containers with borders MUST have internal padding. Use grid layouts strictly with direct children."
+  },
+  "surfaces_and_effects": {
+    "header": "Crystal Glassmorphism: backdrop-blur-xl bg-[#05050A]/70 border-b border-white/10.",
+    "dashboard_cards": "Flat background (#0C0C14) with 1px border-white/5. Hover adds -translate-y-1 and a subtle neon shadow (shadow-[0_8px_32px_rgba(138,43,226,0.15)]).",
+    "webcam_container": "Tracing Beam effect: neon border highlighting active AI facial mesh scanning.",
+    "glow": "Use subtle drop-shadows on key text/metrics (drop-shadow-[0_0_8px_rgba(0,229,255,0.4)])."
+  },
+  "motion_and_interactions": {
+    "page_transitions": "Framer Motion: fade and slight upward slide.",
+    "microinteractions": "Hover scale 1.02 on interactive cards. Active state scale 0.98 on buttons.",
+    "alerts": "Pulsing animation for STRAIN DETECTED state.",
+    "guidelines": "Animations must respect prefers-reduced-motion. Transitions should be smooth (0.2s ease-out)."
+  },
+  "components": {
+    "ui_library": "Shadcn/UI heavily customized for dark futuristic theme.",
+    "charts": "Shadcn Recharts components. Use gradient fills (Purple to Cyan) with dark grid lines (white/5).",
+    "buttons": "Primary CTA: bg-primary text-white hover:bg-primary_hover shadow-[0_0_15px_rgba(138,43,226,0.5)].",
+    "icons": "lucide-react"
+  },
+  "image_urls": {
+    "hero_background": {
+      "url": "https://images.unsplash.com/photo-1741704751345-c73a6e56cc8d",
+      "description": "Abstract purple and white swirls creating an optical illusion, used as a subtle background behind the hero section with low opacity."
+    },
+    "analytics_preview": {
+      "url": "https://images.unsplash.com/photo-1686061592689-312bbfb5c055",
+      "description": "Dashboard analytics glowing on screen, useful for landing page feature mockups."
+    },
+    "user_avatar": {
+      "url": "https://images.pexels.com/photos/7905813/pexels-photo-7905813.jpeg",
+      "description": "Professional confident young man in dark suit, used for user profile/dashboard header."
+    },
+    "tech_logo": {
+      "url": "https://images.unsplash.com/photo-1760386129108-d17b9cdfc4fa",
+      "description": "Neon illuminated logo for sponsor or partner section in landing page."
+    }
+  },
+  "instructions_to_main_agent": [
+    "Build the landing page, SaaS dashboard, and real-time webcam UI in a unified React/Vite/Next stack as required.",
+    "The UI MUST reflect a premium, futuristic AI health-tech brand. Use the purple (#8A2BE2) and cyan (#00E5FF) colors heavily as accents over the deep dark background.",
+    "Implement the live webcam feed with a HUD overlay. Draw facial mesh or tracking boxes mimicking MediaPipe using HTML/Canvas/SVG over the video element. Apply cyan neon styling to the mesh.",
+    "Dashboard charts (daily/weekly/monthly fatigue analytics) MUST use Shadcn chart components with customized neon gradients.",
+    "Every interactive element (buttons, forms, links) MUST have a unique role-based `data-testid` attribute (e.g., `data-testid='start-session-btn'`).",
+    "The UI should look like a high-end investor demo: use framer-motion for staggering list items, smooth card reveals, and glassmorphism on the sidebar/header.",
+    "DO NOT use Inter font for headings. Integrate Outfit (headings) and Manrope (body).",
+    "Include n8n webhook status and API health indicators in the Admin panel, styled as technical terminal/status pills."
+  ]
+}
