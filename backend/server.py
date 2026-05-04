@@ -166,10 +166,11 @@ def create_refresh_token(user_id: str) -> str:
         JWT_SECRET, algorithm=JWT_ALGORITHM)
 
 def set_auth_cookies(response: Response, access: str, refresh: str):
-    response.set_cookie("access_token", access, httponly=True, secure=False,
-        samesite="lax", max_age=ACCESS_TOKEN_MINUTES * 60, path="/")
-    response.set_cookie("refresh_token", refresh, httponly=True, secure=False,
-        samesite="lax", max_age=REFRESH_TOKEN_DAYS * 24 * 3600, path="/")
+    # secure=True + samesite="none" required for cross-site cookies (Netlify <-> Railway)
+    response.set_cookie("access_token", access, httponly=True, secure=True,
+        samesite="none", max_age=ACCESS_TOKEN_MINUTES * 60, path="/")
+    response.set_cookie("refresh_token", refresh, httponly=True, secure=True,
+        samesite="none", max_age=REFRESH_TOKEN_DAYS * 24 * 3600, path="/")
 
 def user_to_public(user: Dict) -> UserPublic:
     return UserPublic(id=user["id"], email=user["email"], name=user["name"],
@@ -252,8 +253,8 @@ async def login(body: LoginIn, response: Response):
 
 @api_router.post("/auth/logout")
 async def logout(response: Response):
-    response.delete_cookie("access_token", path="/")
-    response.delete_cookie("refresh_token", path="/")
+    response.delete_cookie("access_token", path="/", samesite="none", secure=True)
+    response.delete_cookie("refresh_token", path="/", samesite="none", secure=True)
     return {"ok": True}
 
 @api_router.get("/auth/me", response_model=UserPublic)
@@ -273,8 +274,9 @@ async def refresh_token(request: Request, response: Response):
         if not user:
             raise HTTPException(status_code=401, detail="User not found")
         access = create_access_token(user["id"], user["email"], user.get("role", "user"))
-        response.set_cookie("access_token", access, httponly=True, secure=False,
-            samesite="lax", max_age=ACCESS_TOKEN_MINUTES * 60, path="/")
+        # secure=True + samesite="none" required for cross-site cookies
+        response.set_cookie("access_token", access, httponly=True, secure=True,
+            samesite="none", max_age=ACCESS_TOKEN_MINUTES * 60, path="/")
         return {"ok": True}
     except pyjwt.InvalidTokenError:
         raise HTTPException(status_code=401, detail="Invalid token")
@@ -455,7 +457,19 @@ async def root():
 
 
 app.include_router(api_router)
+
+# ----- CORS -----
+# Must include Netlify URL + localhost for dev. secure=True cookies require https origins.
 frontend_url = os.environ.get('FRONTEND_URL', 'http://localhost:3000')
-app.add_middleware(CORSMiddleware,
-    allow_origins=[frontend_url, "http://localhost:3000", "http://127.0.0.1:3000"],
-    allow_credentials=True, allow_methods=["*"], allow_headers=["*"])
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        frontend_url,
+        "https://focusguard-ai.netlify.app",
+        "http://localhost:3000",
+        "http://127.0.0.1:3000",
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
